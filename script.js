@@ -17,24 +17,22 @@ async function loadServices() {
 
 // 2. The function that actually builds the cards on your screen
 function displayServices(data) {
+    console.log("Website received this data:", data); // This helps us debug!
     const serviceGrid = document.querySelector('.service-grid');
-    if (!serviceGrid) return; // Safety check
-    
     serviceGrid.innerHTML = ""; 
 
-    if (data.length === 0) {
-        serviceGrid.innerHTML = "<p>No services found. Run the scraper!</p>";
-        return;
-    }
-
     data.forEach(service => {
+        // We use || to provide a backup if the name is missing
+        const name = service.name || service.business_name || service.title || "Unknown";
+        const price = service.price || "Contact for Quote";
+        
         serviceGrid.innerHTML += `
             <div class="card">
                 <div class="card-content">
-                    <h3>${service.name || "Unknown Business"}</h3>
-                    <p class="category">${service.category || "General Service"}</p>
-                    <p class="price-range">Starting at <strong>$${service.price || "???"}</strong></p>
-                    <button class="btn-outline" onclick="contactVendor('${service.name}')">Compare Prices</button>
+                    <h3>${name}</h3>
+                    <p class="category">${service.category || "Local Service"}</p>
+                    <p class="price-range">Starting at <strong>$${price}</strong></p>
+                    <button class="btn-outline" onclick="contactVendor('${name}')">Compare Prices</button>
                 </div>
             </div>
         `;
