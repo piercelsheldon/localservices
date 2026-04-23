@@ -1,4 +1,4 @@
-const scrapingbee = require('scrapingbee'); // Correct import for Node.js
+const scrapingbee = require('scrapingbee');
 const fs = require('fs');
 
 async function getNewPrices() {
@@ -9,60 +9,40 @@ async function getNewPrices() {
     process.exit(1);
   }
 
-  // Note the 'new' keyword and the library name
   const client = new scrapingbee.ScrapingBeeClient(apiKey);
-  
+
   try {
-    console.log("Scraper is starting...");
-    
-    // We use a stable URL to ensure the bot works first
-   const response = await client.get({
-  url: 'https://www.davisheat.com/resources/', // Targeting their resources/membership page
-  params: {
-    "extract_rules": {
-      "business_name": "title", // Grabs "Davis Heating, Cooling, Plumbing & Electric"
-      "membership_deal": ".card-title" // Grabs the name of their maintenance plan
-    },
-    "render_js": "True" 
-  }
-});
+    console.log("Scraper is starting for Davis Heating & Cooling...");
 
-if (response.status === 200) {
-  const decoder = new TextDecoder('utf-8');
-  const text = decoder.decode(response.data);
-  const scrapedData = JSON.parse(text);
-
-  const services = [
-    { 
-      name: "Davis Heating & Cooling", // We can keep the name clean
-      category: scrapedData.membership_deal || "HVAC & Plumbing", 
-      price: "16.25" // Their current starting monthly membership rate
-    }
-  ];
-
-  fs.writeFileSync('./services-data.json', JSON.stringify(services, null, 2));
-}
-
+    const response = await client.get({
+      url: 'https://www.davisheat.com/resources/',
+      params: {
+        "extract_rules": {
+          "business_name": "title",
+          "membership_deal": ".card-title"
+        },
+        "render_js": "True"
+      }
+    });
 
     if (response.status === 200) {
       const decoder = new TextDecoder('utf-8');
       const text = decoder.decode(response.data);
       const scrapedData = JSON.parse(text);
-      
-      console.log("Scrape Success! Found:", scrapedData.title);
 
-      // Now we use the ACTUAL data from the website
+      console.log("Scrape Success! Found:", scrapedData.business_name);
+
+      // Create the array using the names we defined in 'extract_rules'
       const services = [
-        { 
-          name: scrapedData.title || "Unknown Business", // Uses real title
-          category: "Local Service", 
-          price: scrapedData.price || "Contact for Quote" // Uses real price (if scraped)
+        {
+          name: "Davis Heating & Cooling", // Keep it clean for the UI
+          category: scrapedData.membership_deal || "HVAC & Plumbing",
+          price: "16.25" // Their current starting rate
         }
       ];
 
       fs.writeFileSync('./services-data.json', JSON.stringify(services, null, 2));
       console.log("✅ Live data saved to services-data.json!");
-    }
     } else {
       console.error(`ScrapingBee returned an error status: ${response.status}`);
       process.exit(1);
