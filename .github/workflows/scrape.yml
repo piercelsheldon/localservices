@@ -1,0 +1,35 @@
+name: Update Prices Scraper
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # Runs every Sunday at Midnight
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/checkout@v3
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install scrapingbee
+
+      - name: Run Scraper
+        run: node update-prices.js
+        env:
+          # This protects your API key (Step 3 explains this)
+          SCRAPINGBEE_API_KEY: ${{ secrets.SCRAPINGBEE_API_KEY }}
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "Price Bot"
+          git config --global user.email "bot@localprice.com"
+          git add services-data.json
+          git commit -m "Automated price update" || echo "No changes to commit"
+          git push
