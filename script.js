@@ -22,36 +22,35 @@ async function loadServices() {
 }
 
 // 2. Build the cards on your screen
-// 2. Build the cards on your screen
 function displayServices(data) {
     const serviceGrid = document.querySelector('.service-grid');
     if (!serviceGrid) return;
     serviceGrid.innerHTML = ""; 
 
     data.forEach(service => {
-        const name = service.name || "Unknown Business";
-        const price = service.price || "Contact for Quote";
-        
-        // Using Source Unsplash + Random ID to bypass CORB
-        const imgUrl = "https://unsplash.com" + Math.random();
+    const name = service.name || "Unknown Business";
+    const price = service.price || "Contact for Quote";
+    
+    // We are now using your local file! 
+    // Make sure 'davis-logo.png' is uploaded to your main GitHub folder.
+    const imgUrl = "davis-logo.png"; 
 
-        serviceGrid.innerHTML += `
-            <div class="card">
-                <img src="${imgUrl}" 
-                     alt="${name}" 
-                     loading="lazy"
-                     style="width: 100%; height: 200px; object-fit: cover; background: #eee;">
-                
-                <div class="card-content">
-                    <h3>${name}</h3>
-                    <p class="category">${service.category || "Local Service"}</p>
-                    <p class="price-range">Starting at <strong>$${price}</strong></p>
-                    <button class="btn-outline" onclick="contactVendor('${name}')">Compare Prices</button>
-                </div>
+    serviceGrid.innerHTML += `
+        <div class="card">
+            <img src="${imgUrl}" 
+                 alt="${name}" 
+                 style="width: 100%; height: 200px; object-fit: contain; background: white; padding: 15px;">
+            
+            <div class="card-content">
+                <h3>${name}</h3>
+                <p class="category">${service.category || "Local Service"}</p>
+                <p class="price-range">Starting at <strong>$${price}</strong></p>
+                <button class="btn-outline" onclick="contactVendor('${name}')">Compare Prices</button>
             </div>
-        `;
-    });
-}
+        </div>
+    `;
+});
+
 
 
 
