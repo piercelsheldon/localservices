@@ -16,24 +16,31 @@ async function loadServices() {
 }
 
 // 2. The function that actually builds the cards on your screen
-function displayServices(filteredServices) {
+function displayServices(data) {
     const serviceGrid = document.querySelector('.service-grid');
-    serviceGrid.innerHTML = ""; // Clear current cards
+    if (!serviceGrid) return; // Safety check
+    
+    serviceGrid.innerHTML = ""; 
 
-    filteredServices.forEach(service => {
+    if (data.length === 0) {
+        serviceGrid.innerHTML = "<p>No services found. Run the scraper!</p>";
+        return;
+    }
+
+    data.forEach(service => {
         serviceGrid.innerHTML += `
             <div class="card">
-                <img src="https://unsplash.com" alt="${service.name}">
                 <div class="card-content">
-                    <h3>${service.name}</h3>
-                    <p class="category">${service.category}</p>
-                    <p class="price-range">Starting at <strong>$${service.price}</strong></p>
+                    <h3>${service.name || "Unknown Business"}</h3>
+                    <p class="category">${service.category || "General Service"}</p>
+                    <p class="price-range">Starting at <strong>$${service.price || "???"}</strong></p>
                     <button class="btn-outline" onclick="contactVendor('${service.name}')">Compare Prices</button>
                 </div>
             </div>
         `;
     });
 }
+
 
 // 3. Modern Real-Time Search Logic
 function searchServices() {
