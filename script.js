@@ -1,20 +1,27 @@
 // 1. Initial function to fetch your scraped data
 async function loadServices() {
     try {
-        // This fetches the file your Robot Script creates
-        const response = await fetch('./services-data.json');
+        // Updated with headers to bypass CORB security blocking
+        const response = await fetch('./services-data.json', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        
         const services = await response.json();
         
         // Save data globally so the search function can use it
         window.allServices = services;
         
-        // Display all services immediately on page load
+        // Display all services immediately
         displayServices(services);
+        
+        console.log("Success: Data loaded and rendered.");
     } catch (error) {
-        console.error("Pro Tip: Ensure update-prices.js has run once to create services-data.json!", error);
+        console.error("CORB or Fetch Error:", error);
     }
 }
-
 // 2. The function that actually builds the cards on your screen
 function displayServices(data) {
     console.log("Website received this data:", data); // This helps us debug!
