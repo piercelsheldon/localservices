@@ -1,21 +1,58 @@
-// This is your data (In the future, this might come from a database)
-const services = [
-    { name: "Fast Plumbing", category: "Plumbing", price: 50 },
-    { name: "Green Gardeners", category: "Landscaping", price: 40 },
-    { name: "Sparkle Cleaners", category: "Cleaning", price: 30 }
-];
-
-// This function runs when someone types in the search bar
-function searchServices() {
-    let input = document.getElementById('searchBar').value.toLowerCase();
-    console.log("User is searching for: " + input);
-    
-    // Logic to filter the cards on the screen would go here
-    // For now, it just prints the search to your browser's console
+// 1. Initial function to fetch your scraped data
+async function loadServices() {
+    try {
+        // This fetches the file your Robot Script creates
+        const response = await fetch('./services-data.json');
+        const services = await response.json();
+        
+        // Save data globally so the search function can use it
+        window.allServices = services;
+        
+        // Display all services immediately on page load
+        displayServices(services);
+    } catch (error) {
+        console.error("Pro Tip: Ensure update-prices.js has run once to create services-data.json!", error);
+    }
 }
 
-// Example of a button alert
+// 2. The function that actually builds the cards on your screen
+function displayServices(filteredServices) {
+    const serviceGrid = document.querySelector('.service-grid');
+    serviceGrid.innerHTML = ""; // Clear current cards
+
+    filteredServices.forEach(service => {
+        serviceGrid.innerHTML += `
+            <div class="card">
+                <img src="https://unsplash.com" alt="${service.name}">
+                <div class="card-content">
+                    <h3>${service.name}</h3>
+                    <p class="category">${service.category}</p>
+                    <p class="price-range">Starting at <strong>$${service.price}</strong></p>
+                    <button class="btn-outline" onclick="contactVendor('${service.name}')">Compare Prices</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+// 3. Modern Real-Time Search Logic
+function searchServices() {
+    let input = document.getElementById('searchBar').value.toLowerCase();
+    
+    // Filter the global data based on user input
+    const filtered = window.allServices.filter(service => 
+        service.name.toLowerCase().includes(input) || 
+        service.category.toLowerCase().includes(input)
+    );
+    
+    displayServices(filtered);
+}
+
+// 4. Your existing Alert Logic
 function contactVendor(vendorName) {
     alert("Redirecting you to " + vendorName + ". This is where your lead-gen magic happens!");
 }
+
+// 5. Initialize the site
 document.getElementById("year").innerHTML = new Date().getFullYear();
+loadServices();
