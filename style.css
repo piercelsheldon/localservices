@@ -81,17 +81,25 @@ main {
     margin-top: 20px;
 }
 
+/*To make the cards move when you hover over them */
 .card {
     background: white;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth movement */
+}
+.card:hover {
+    transform: translateY(-5px); /* Lifts the card up */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* Adds a deeper shadow */
 }
 
 .card img {
     width: 100%;
     height: 180px;
     object-fit: cover;
+    background-color: #e0e0e0; /* This is the "fallback" gray if an image is missing */
+    display: block;
 }
 
 .card-content {
