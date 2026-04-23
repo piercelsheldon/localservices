@@ -32,11 +32,15 @@ function displayServices(data) {
         const name = service.name || "Unknown Business";
         const price = service.price || "Contact for Quote";
         
+        // Use a stable, widely-trusted source for the image
+        const imgUrl = "https://unsplash.com";
+
         serviceGrid.innerHTML += `
             <div class="card">
-                <!-- FIXED: Using a direct image source link instead of just the website link -->
-                <img src="https://unsplash.com" 
-                     alt="${name}">
+                <img src="${imgUrl}" 
+                     alt="${name}" 
+                     onerror="this.onerror=null; this.src='https://placeholder.com';"
+                     style="display: block; width: 100%; height: 200px; object-fit: cover; background-color: #f0f0f0;">
                 
                 <div class="card-content">
                     <h3>${name}</h3>
@@ -48,6 +52,7 @@ function displayServices(data) {
         `;
     });
 }
+
 
 
 // 3. Search Logic
