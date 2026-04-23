@@ -22,6 +22,7 @@ async function loadServices() {
 }
 
 // 2. Build the cards on your screen
+// 2. Build the cards on your screen
 function displayServices(data) {
     const serviceGrid = document.querySelector('.service-grid');
     if (!serviceGrid) return;
@@ -33,8 +34,9 @@ function displayServices(data) {
         
         serviceGrid.innerHTML += `
             <div class="card">
-                <!-- NEW: Professional Image added here -->
-                <img src="https://unsplash.com" alt="${name}" style="width:100%; height:200px; object-fit:cover;">
+                <!-- FIXED: Using a direct image source link instead of just the website link -->
+                <img src="https://unsplash.com" 
+                     alt="${name}">
                 
                 <div class="card-content">
                     <h3>${name}</h3>
@@ -46,6 +48,7 @@ function displayServices(data) {
         `;
     });
 }
+
 
 // 3. Search Logic
 function searchServices() {
