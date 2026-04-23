@@ -33,6 +33,9 @@ function displayServices(data) {
         
         serviceGrid.innerHTML += `
             <div class="card">
+                <!-- NEW: Professional Image added here -->
+                <img src="https://unsplash.com" alt="${name}" style="width:100%; height:200px; object-fit:cover;">
+                
                 <div class="card-content">
                     <h3>${name}</h3>
                     <p class="category">${service.category || "Local Service"}</p>
