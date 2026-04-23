@@ -18,3 +18,4 @@ function searchServices() {
 function contactVendor(vendorName) {
     alert("Redirecting you to " + vendorName + ". This is where your lead-gen magic happens!");
 }
+document.getElementById("year").innerHTML = new Date().getFullYear();
