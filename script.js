@@ -32,15 +32,15 @@ function displayServices(data) {
         const name = service.name || "Unknown Business";
         const price = service.price || "Contact for Quote";
         
-        // Use a stable, widely-trusted source for the image
-        const imgUrl = "https://unsplash.com";
+        // Using Source Unsplash + Random ID to bypass CORB
+        const imgUrl = "https://unsplash.com" + Math.random();
 
         serviceGrid.innerHTML += `
             <div class="card">
                 <img src="${imgUrl}" 
                      alt="${name}" 
-                     onerror="this.onerror=null; this.src='https://placeholder.com';"
-                     style="display: block; width: 100%; height: 200px; object-fit: cover; background-color: #f0f0f0;">
+                     loading="lazy"
+                     style="width: 100%; height: 200px; object-fit: cover; background: #eee;">
                 
                 <div class="card-content">
                     <h3>${name}</h3>
