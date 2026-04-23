@@ -2,18 +2,18 @@ name: Update Prices Scraper
 
 on:
   schedule:
-    - cron: '0 0 * * 0' # Runs every Sunday at Midnight
-  workflow_dispatch: # Allows you to run it manually for testing
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/checkout@v3
+        uses: actions/setup-node@v4  # This was the typo! (Was checkout@v3)
         with:
           node-version: '20'
 
@@ -23,7 +23,6 @@ jobs:
       - name: Run Scraper
         run: node update-prices.js
         env:
-          # This protects your API key (Step 3 explains this)
           SCRAPINGBEE_API_KEY: ${{ secrets.SCRAPINGBEE_API_KEY }}
 
       - name: Commit and Push Changes
