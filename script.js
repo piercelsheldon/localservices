@@ -1,3 +1,5 @@
+console.log("Script.js is officially loading!");
+
 // 1. Initial function to fetch your scraped data
 async function loadServices() {
     try {
@@ -8,10 +10,12 @@ async function loadServices() {
             }
         });
         
+        if (!response.ok) throw new Error("File not found");
+
         const services = await response.json();
         window.allServices = services;
         displayServices(services);
-        console.log("Success: Data loaded.");
+        console.log("Data loaded successfully!");
     } catch (error) {
         console.error("Fetch Error:", error);
     }
@@ -24,7 +28,7 @@ function displayServices(data) {
     serviceGrid.innerHTML = ""; 
 
     data.forEach(service => {
-        const name = service.name || "Unknown";
+        const name = service.name || "Unknown Business";
         const price = service.price || "Contact for Quote";
         
         serviceGrid.innerHTML += `
@@ -40,15 +44,16 @@ function displayServices(data) {
     });
 }
 
-// 3. Search Logic (Fixed the reference error)
+// 3. Search Logic
 function searchServices() {
     let input = document.getElementById('searchBar').value.toLowerCase();
     if (!window.allServices) return;
 
-    const filtered = window.allServices.filter(service => 
-        (service.name && service.name.toLowerCase().includes(input)) || 
-        (service.category && service.category.toLowerCase().includes(input))
-    );
+    const filtered = window.allServices.filter(service => {
+        const nameMatch = service.name && service.name.toLowerCase().includes(input);
+        const catMatch = service.category && service.category.toLowerCase().includes(input);
+        return nameMatch || catMatch;
+    });
     displayServices(filtered);
 }
 
