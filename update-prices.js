@@ -25,30 +25,24 @@ async function getNewPrices() {
     });
 
     if (response.status === 200) {
-      // PRO FIX: Correctly decode the raw data buffer into a string
       const decoder = new TextDecoder('utf-8');
       const text = decoder.decode(response.data);
       const scrapedData = JSON.parse(text);
       
-      console.log("Found Title:", scrapedData.title);
+      console.log("Scrape Success! Found:", scrapedData.title);
 
-      // This is the data structure your website's script.js expects
+      // Now we use the ACTUAL data from the website
       const services = [
         { 
-          name: "Fast Plumbing", 
-          category: "Plumbing", 
-          price: "85" 
-        },
-        { 
-          name: "Green Gardeners", 
-          category: "Landscaping", 
-          price: "45" 
+          name: scrapedData.title || "Unknown Business", // Uses real title
+          category: "Local Service", 
+          price: scrapedData.price || "Contact for Quote" // Uses real price (if scraped)
         }
       ];
 
-      // Save the file
       fs.writeFileSync('./services-data.json', JSON.stringify(services, null, 2));
-      console.log("✅ services-data.json updated successfully!");
+      console.log("✅ Live data saved to services-data.json!");
+    }
     } else {
       console.error(`ScrapingBee returned an error status: ${response.status}`);
       process.exit(1);
