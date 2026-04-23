@@ -1,49 +1,60 @@
-const { ScrapingBeeClient } = require('scrapingbee');
+const scrapingbee = require('scrapingbee'); // Correct import for Node.js
 const fs = require('fs');
 
 async function getNewPrices() {
-  // 1. Check if the API Key exists in the environment
-  if (!process.env.SCRAPINGBEE_API_KEY) {
-    console.error("ERROR: API Key is missing! Check your GitHub Secrets.");
+  const apiKey = process.env.SCRAPINGBEE_API_KEY;
+
+  if (!apiKey) {
+    console.error("CRITICAL: SCRAPINGBEE_API_KEY is missing from GitHub Secrets.");
     process.exit(1);
   }
 
-  const client = new ScrapingBeeClient(process.env.SCRAPINGBEE_API_KEY);
+  // Note the 'new' keyword and the library name
+  const client = new scrapingbee.ScrapingBeeClient(apiKey);
   
   try {
-    console.log("Starting scrape...");
+    console.log("Scraper is starting...");
+    
+    // We use a stable URL to ensure the bot works first
     const response = await client.get({
-      url: 'https://scrapingbee.com', // Testing with a real, stable page
+      url: 'https://scrapingbee.com', 
       params: {
-        "extract_rules": {"title": "h1"}, 
+        "extract_rules": { "title": "h1" },
         "render_js": "False"
       }
     });
 
     if (response.status === 200) {
-      // ScrapingBee returns a Buffer, we need to convert it to a string
-      const decoder = new TextDecoder();
+      // PRO FIX: Correctly decode the raw data buffer into a string
+      const decoder = new TextDecoder('utf-8');
       const text = decoder.decode(response.data);
-      const data = JSON.parse(text);
+      const scrapedData = JSON.parse(text);
       
-      console.log("Scrape successful! Found:", data);
+      console.log("Found Title:", scrapedData.title);
 
-      const newServiceData = [
+      // This is the data structure your website's script.js expects
+      const services = [
         { 
           name: "Fast Plumbing", 
           category: "Plumbing", 
-          price: data.title ? "85" : "N/A" // Safety fallback
+          price: "85" 
+        },
+        { 
+          name: "Green Gardeners", 
+          category: "Landscaping", 
+          price: "45" 
         }
       ];
 
-      fs.writeFileSync('./services-data.json', JSON.stringify(newServiceData, null, 2));
-      console.log("services-data.json updated!");
+      // Save the file
+      fs.writeFileSync('./services-data.json', JSON.stringify(services, null, 2));
+      console.log("✅ services-data.json updated successfully!");
     } else {
-      console.error("ScrapingBee returned status:", response.status);
+      console.error(`ScrapingBee returned an error status: ${response.status}`);
       process.exit(1);
     }
   } catch (error) {
-    console.error("CRITICAL ERROR:", error.message);
+    console.error("The script hit a snag:", error.message);
     process.exit(1);
   }
 }
