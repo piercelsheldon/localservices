@@ -39,6 +39,9 @@ header {
     content: '';
     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
     background: linear-gradient(rgba(26, 37, 47, 0.85), rgba(26, 37, 47, 0.5)); /* Dark fade for readability */
+    z-index: 1;
+    pointer-events: none;
+}
 }
 
 .hero-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
