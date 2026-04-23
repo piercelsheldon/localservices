@@ -1,96 +1,87 @@
-/* 1. Modern Variable Fonts & Reset */
+/* 1. Global Reset & Pro Fonts */
 @import url('https://googleapis.com');
 
 :root {
-    --primary: #27ae60;
-    --dark: #1a252f;
-    --glass: rgba(255, 255, 255, 0.7);
-    --border: rgba(255, 255, 255, 0.3);
+    --fb-blue: #1877F2; /* Classic modern Facebook Blue */
+    --bg-gray: #F0F2F5; /* Neutral FB background */
+    --card-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-body { background-color: #f8fafc; color: var(--dark); line-height: 1.6; }
+body { background-color: var(--bg-gray); color: #1c1e21; }
 
-/* 2. Sleek Navigation */
+/* 2. Sleek Sticky Navigation */
 header {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px); /* Modern frosted effect */
+    background: white;
+    padding: 10px 5%;
     position: sticky; top: 0; z-index: 1000;
-    padding: 1rem 5%;
-    border-bottom: 1px solid #eee;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
-.logo { font-weight: 800; letter-spacing: -1px; color: var(--primary); font-size: 1.8rem; }
+.logo { color: var(--fb-blue); font-weight: 800; font-size: 1.8rem; letter-spacing: -1.5px; }
 
-/* 3. High-Impact Hero with Background Image */
+/* 3. Immersive Hero with Opacity Overlay */
 .hero {
     position: relative;
-    padding: 120px 20px;
-    background: url('https://unsplash.com'); /* Professional cleaning/home service shot */
+    padding: 80px 20px;
+    background: url('https://unsplash.com'); /* Modern home interior */
     background-size: cover;
     background-position: center;
     color: white;
     text-align: center;
 }
 
-/* The "Magic" Opacity Layer */
+/* Fix for the non-clickable issue: Ensure content is above the overlay */
 .hero::before {
     content: '';
-    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(rgba(26, 37, 47, 0.85), rgba(26, 37, 47, 0.5)); /* Dark fade for readability */
-    z-index: 1;
-    pointer-events: none;
-}
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Modern dark opacity layer */
+    pointer-events: none; /* Clicks pass through to the search bar */
 }
 
-.hero-content { position: relative; z-index: 2; max-width: 800px; margin: 0 auto; }
+.hero-content { position: relative; z-index: 2; }
 
-.hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem; line-height: 1.1; }
-
-/* 4. Sleek Rounded Search Bar */
+/* 4. Modern Bento Search Bar */
 .search-container {
-    display: flex; background: white; border-radius: 50px; 
-    padding: 8px; margin-top: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    display: flex; max-width: 600px; margin: 30px auto 0;
+    background: white; border-radius: 50px; padding: 5px;
+    box-shadow: var(--card-shadow);
 }
 
 input[type="text"] {
-    flex: 1; border: none; padding: 15px 25px; border-radius: 50px; font-size: 1.1rem; outline: none;
+    flex: 1; border: none; padding: 15px 25px; 
+    border-radius: 50px 0 0 50px; outline: none; font-size: 1rem;
 }
 
 .btn-primary {
-    background: var(--primary); color: white; border: none; 
-    padding: 15px 35px; border-radius: 50px; font-weight: 600; cursor: pointer;
-    transition: transform 0.2s;
+    background: var(--fb-blue); color: white; border: none;
+    padding: 12px 30px; border-radius: 50px; font-weight: 700; cursor: pointer;
 }
 
-.btn-primary:hover { transform: scale(1.05); }
-
-/* 5. Professional Glassmorphism Cards */
+/* 5. FB-Style Feed Cards */
 .service-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px; padding: 60px 5%;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px; padding: 40px 5%;
 }
 
 .card {
-    background: var(--glass);
-    backdrop-filter: blur(15px); /* Frosted glass effect */
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: white; border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
 }
 
-.card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+.card:hover { transform: scale(1.01); box-shadow: var(--card-shadow); }
 
-.card-content h3 { font-size: 1.4rem; margin-bottom: 8px; }
+.card img { width: 100%; height: 200px; object-fit: cover; }
 
-.price-range strong { color: var(--primary); font-size: 1.5rem; }
+.card-content { padding: 16px; }
+
+.price-range strong { color: var(--fb-blue); font-size: 1.3rem; }
 
 .btn-outline {
-    width: 100%; padding: 12px; background: white;
-    border: 2px solid #eee; border-radius: 12px;
-    font-weight: 600; color: var(--dark); cursor: pointer; transition: 0.3s;
+    width: 100%; padding: 10px; border-radius: 6px; border: none;
+    background: #E4E6EB; color: #050505; font-weight: 600; cursor: pointer;
 }
 
-.btn-outline:hover { border-color: var(--primary); background: var(--primary); color: white; }
+.btn-outline:hover { background: #D8DADF; }
