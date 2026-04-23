@@ -1,7 +1,6 @@
 // 1. Initial function to fetch your scraped data
 async function loadServices() {
     try {
-        // Updated with headers to bypass CORB security blocking
         const response = await fetch('./services-data.json', {
             headers: {
                 'Content-Type': 'application/json',
@@ -10,27 +9,22 @@ async function loadServices() {
         });
         
         const services = await response.json();
-        
-        // Save data globally so the search function can use it
         window.allServices = services;
-        
-        // Display all services immediately
         displayServices(services);
-        
-        console.log("Success: Data loaded and rendered.");
+        console.log("Success: Data loaded.");
     } catch (error) {
-        console.error("CORB or Fetch Error:", error);
+        console.error("Fetch Error:", error);
     }
 }
-// 2. The function that actually builds the cards on your screen
+
+// 2. Build the cards on your screen
 function displayServices(data) {
-    console.log("Website received this data:", data); // This helps us debug!
     const serviceGrid = document.querySelector('.service-grid');
+    if (!serviceGrid) return;
     serviceGrid.innerHTML = ""; 
 
     data.forEach(service => {
-        // We use || to provide a backup if the name is missing
-        const name = service.name || service.business_name || service.title || "Unknown";
+        const name = service.name || "Unknown";
         const price = service.price || "Contact for Quote";
         
         serviceGrid.innerHTML += `
@@ -46,25 +40,26 @@ function displayServices(data) {
     });
 }
 
-
-// 3. Modern Real-Time Search Logic
+// 3. Search Logic (Fixed the reference error)
 function searchServices() {
     let input = document.getElementById('searchBar').value.toLowerCase();
-    
-    // Filter the global data based on user input
+    if (!window.allServices) return;
+
     const filtered = window.allServices.filter(service => 
-        service.name.toLowerCase().includes(input) || 
-        service.category.toLowerCase().includes(input)
+        (service.name && service.name.toLowerCase().includes(input)) || 
+        (service.category && service.category.toLowerCase().includes(input))
     );
-    
     displayServices(filtered);
 }
 
-// 4. Your existing Alert Logic
+// 4. Alert Logic
 function contactVendor(vendorName) {
-    alert("Redirecting you to " + vendorName + ". This is where your lead-gen magic happens!");
+    alert("Redirecting you to " + vendorName);
 }
 
 // 5. Initialize the site
-document.getElementById("year").innerHTML = new Date().getFullYear();
-loadServices();
+window.addEventListener('DOMContentLoaded', () => {
+    const yearEl = document.getElementById("year");
+    if (yearEl) yearEl.innerHTML = new Date().getFullYear();
+    loadServices();
+});
