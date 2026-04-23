@@ -2,7 +2,7 @@ const { ScrapingBeeClient } = require('scrapingbee');
 const fs = require('fs');
 
 async function getNewPrices() {
-  const client = new ScrapingBeeClient('YOUR_SCRAPINGBEE_API_KEY');
+  const client = new ScrapingBeeClient(process.env.SCRAPINGBEE_API_KEY);
   
   // 1. Target your local business
   const response = await client.get({
